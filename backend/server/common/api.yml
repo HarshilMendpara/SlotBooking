@@ -1,76 +1,184 @@
-swagger: "2.0"
+openapi: 3.0.1
 info:
   version: 1.0.0
-  title: SlotBooking
-  description: Backend APIs
-basePath: /api/v1
+  title: Course Slot Booking System
+  description: Endpoints for Course Slot Booking System
+servers:
+  - url: /api/v1
 tags:
-  - name: Examples
-    description: Simple example endpoints
-  - name: Specification
-    description: The swagger API specification
-
-consumes:
-  - application/json
-produces:
-  - application/json
-
-
-definitions:
-  ExampleBody:
-    type: object
-    title: example
-    required:
-      - name
-    properties:
-      name:
-        type: string
-        example: no_stress
+  - name: Courses
+    description: Course Slot Booking endpoints
 
 paths:
-  /examples:
+  /courses:
     get:
       tags:
-        - Examples
-      description: Fetch all examples
+        - Courses
+      summary: Get all courses
+      description: Fetch all courses
       responses:
         200:
-          description: Returns all examples
-    post:
-      tags:
-        - Examples
-      description: Create a new example
-      parameters:
-        - name: example
-          in: body
-          description: an example
-          required: true
-          schema: 
-            $ref: "#/definitions/ExampleBody"
-      responses:
-        200:
-          description: Returns all examples
-
-  /examples/{id}:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetCoursesResponse"
+  /courses/{course}:
     get:
       tags:
-        - Examples
+        - Courses
       parameters:
-        - name: id
+        - name: course
           in: path
           required: true
-          description: The id of the example to retrieve
-          type: integer
+          description: The name of the course to retrieve
+          schema:
+            type: string
+      summary: Get a course by name
+      description: Fetch a course by name
       responses:
         200:
-          description: Return the example with the specified id
-        404:
-          description: Example not found
-
-  /spec:
-    get:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetCourseByNameResponse"
+  /courses/addCourse:
+    post:
       tags:
-        - Specification
+        - Courses
+      summary: Add a course
+      description: Add a new course
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddCourseRequest"
       responses:
         200:
-          description: Return the API specification
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+  /courses/book/{course}:
+    put:
+      tags:
+        - Courses
+      parameters:
+        - name: course
+          in: path
+          required: true
+          description: The name of the course to book
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BookCourseRequest"
+      summary: Book a course
+      description: Book a slot for a course
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+  /courses/cancel/{course}:
+    put:
+      tags:
+        - Courses
+      parameters:
+        - name: course
+          in: path
+          required: true
+          description: The name of the course to book
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BookCourseRequest"
+      summary: Cancel a course
+      description: Cancel a slot for a course
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+components:
+  schemas:
+    GetCoursesResponse:
+      type: object
+      properties:
+        courses:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              courseName:
+                type: string
+              capacity:
+                type: number
+              startTime:
+                type: number
+              bookedSlots:
+                type: array
+                items:
+                  type: string
+              waitingList:
+                type: array
+                items:
+                  type: string
+    GetCourseByNameResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        courseName:
+          type: string
+        capacity:
+          type: number
+        startTime:
+          type: number
+        bookedSlots:
+          type: array
+          items:
+            type: string
+        waitingList:
+          type: array
+          items:
+            type: string
+    AddCourseRequest:
+      type: object
+      required:
+        - courseName
+        - capacity
+      properties:
+        courseName:
+          type: string
+        capacity:
+          type: number
+    SuccessResponse:
+      type: object
+      properties:
+        message:
+          type: string
+    BookCourseRequest:
+      type: object
+      required:
+        - userName
+      properties:
+        userName:
+          type: string
