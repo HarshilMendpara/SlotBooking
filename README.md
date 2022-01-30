@@ -4,7 +4,7 @@
   <h1 align="center">Course Slot Booking System</h1>
   <p>
     Course Slot Booking System
-    <a href="https://slot-booking.azurewebsites.net/">
+    <a href="https://slot-booking.azurewebsites.net/api-explorer/">
     API Doc
   </a>
   </p>
@@ -41,4 +41,4 @@ npm run dev
 
 7. Open http://localhost:3000 to view the API documentation.
 
-### Or You can test API using deployed URL from [here](https://slot-booking.azurewebsites.net/)
+### Or You can test API using deployed URL from [here](https://slot-booking.azurewebsites.net/api-explorer/)
